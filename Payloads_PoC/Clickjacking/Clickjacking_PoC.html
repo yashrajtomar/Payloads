@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Clickjacking Tester</title>
+    <style>
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 0.1; /* Makes the iframe nearly invisible */
+            z-index: 9999;
+        }
+        #container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+        #submit-button {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #input-url {
+            margin: 20px;
+            width: 300px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dynamic Clickjacking Tester</h1>
+    <p>Enter a URL to check if it’s vulnerable to clickjacking:</p>
+    <input id="input-url" type="text" placeholder="Enter URL (e.g., https://example.com)">
+    <button id="submit-button">Test</button>
+    <div id="container"></div>
+
+    <script>
+        document.getElementById("submit-button").addEventListener("click", function () {
+            const inputUrl = document.getElementById("input-url").value;
+            const container = document.getElementById("container");
+
+            if (inputUrl) {
+                // Clear previous iframe if any
+                container.innerHTML = "";
+
+                // Create and embed the iframe
+                const iframe = document.createElement("iframe");
+                iframe.src = inputUrl;
+                container.appendChild(iframe);
+            } else {
+                alert("Please enter a valid URL!");
+            }
+        });
+    </script>
+</body>
+</html>
